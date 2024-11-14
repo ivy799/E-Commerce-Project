@@ -4,6 +4,9 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\StoreController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\Product_detailsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -29,6 +32,39 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         'update' => 'admin.users.update',
         'destroy' => 'admin.users.destroy',
     ]);
+});
+
+Route::middleware(['auth', 'role:seller'])->group(function () {
+    Route::get('/seller/dashboard', [HomeController::class, 'index'])->name('seller.dashboard');
+    Route::resource('/seller/stores', StoreController::class)->names([
+        'index' => 'seller.stores.index',
+        'create' => 'seller.stores.create',
+        'store' => 'seller.stores.store',
+        'show' => 'seller.stores.show',
+        'edit' => 'seller.stores.edit',
+        'update' => 'seller.stores.update',
+        'destroy' => 'seller.stores.destroy',
+    ]);
+
+    Route::resource('/seller/products', ProductController::class)->names([
+        'index' => 'seller.products.index',
+        'create' => 'seller.products.create',
+        'store' => 'seller.products.store',
+        'show' => 'seller.products.show',
+        'edit' => 'seller.products.edit',
+        'update' => 'seller.products.update',
+        'destroy' => 'seller.products.destroy',
+    ]);
+
+    // Route::resource('/seller/product_details', Product_detailsController::class)->names([
+    //     'index' => 'seller.product_details.index',
+    //     'create' => 'seller.product_details.create',
+    //     'store' => 'seller.product_details.store',
+    //     'show' => 'seller.product_details.show',
+    //     'edit' => 'seller.product_details.edit',
+    //     'update' => 'seller.product_details.update',
+    //     'destroy' => 'seller.product_details.destroy',
+    // ]);
 });
 
 require __DIR__.'/auth.php';

@@ -16,6 +16,7 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
                 </div>
+
                 @if(Auth::check() && Auth::user()->role === 'admin')
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                         <x-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.index')">
@@ -24,6 +25,21 @@
                     </div>
                 @endif
 
+                @if(Auth::check() && Auth::user()->role === 'seller')
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('seller.stores.index')" :active="request()->routeIs('seller.stores.index')">
+                            {{ __('Manage Stores') }}
+                        </x-nav-link>
+                    </div>
+                @endif
+                
+                @if(Auth::check() && Auth::user()->role === 'seller')
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('seller.products.index')" :active="request()->routeIs('seller.products.index')">
+                            {{ __('Manage products') }}
+                        </x-nav-link>
+                    </div>
+                @endif
             </div>
 
             <!-- Settings Dropdown -->

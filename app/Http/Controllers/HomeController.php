@@ -17,6 +17,8 @@ class HomeController extends Controller
             if (Auth::user()->role == 'admin') {
                 $userCount = User::count();
                 return view('dashboard.admin.Home', compact('userCount'));
+            }elseif (Auth::user()->role == 'seller') {
+                return view('dashboard.seller.Home');
             }
             return view('dashboard.buyer.Home');
         } else {

@@ -23,6 +23,14 @@
             <x-input-error :messages="$errors->get('address')" class="mt-2" />
         </div>
 
+        <!-- Role -->
+        <div class="mt-4">
+            <label for="role" class="inline-flex items-center">
+                <input id="role" type="checkbox" class="form-checkbox" name="role" value="seller">
+                <span class="ml-2 text-sm text-gray-600">{{ __('Register as Seller') }}</span>
+            </label>
+        </div>
+
         <!-- Password -->
         <div class="mt-4">
             <x-input-label for="password" :value="__('Password')" />
