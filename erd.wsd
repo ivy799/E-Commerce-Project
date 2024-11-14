@@ -1,0 +1,105 @@
+@startuml
+entity "User" as user {
+  * ID : PK
+  --
+  * fullname
+  * username
+  * email
+  * alamat
+  * role
+}
+
+entity "Store" as store {
+  * ID : PK
+  --
+  * name
+  * location
+  * email
+  * user_id : FK
+}
+
+entity "Products" as products {
+  * ID : PK
+  --
+  * store_id : FK
+  * product_details_id : FK
+  * name
+  * brand
+  * description
+  * price
+  * stock
+  * image
+  * category
+  * rating
+}
+
+entity "Product Details" as product_details {
+  * ID : PK
+  --
+  * size
+}
+
+entity "Orders" as orders {
+  * ID : PK
+  --
+  * user_id : FK
+  * order_date
+  * estimated_arrival
+  * status
+  * total_amount
+}
+
+entity "Order Details" as order_details {
+  * ID : PK
+  --
+  * order_id : FK
+  * product_id : FK
+  * quantity
+  * subtotal
+}
+
+entity "Cart" as cart {
+  * ID : PK
+  --
+  * user_id : FK
+  * created_at
+}
+
+entity "Cart Items" as cart_items {
+  * ID : PK
+  --
+  * cart_id : FK
+  * product_id : FK
+  * quantity
+}
+
+entity "Favorite" as favorite {
+  * ID : PK
+  --
+  * user_id : FK
+  * product_id : FK
+}
+
+entity "Comment" as comment {
+  * ID : PK
+  --
+  * user_id : FK
+  * product_id : FK
+  * comment
+  * created_at
+}
+
+user ||--o{ store : "owns"
+store ||--o{ products : "manages"
+products ||--o{ product_details : "has details"
+user ||--o{ cart : "has"
+cart ||--o{ cart_items : "contains"
+cart_items ||--o| products : "includes"
+user ||--o{ orders : "places"
+orders ||--o{ order_details : "contains"
+order_details ||--o| products : "includes"
+user ||--o{ favorite : "marks"
+favorite ||--o| products : "includes"
+user ||--o{ comment : "writes"
+comment ||--o| products : "on"
+@enduml
