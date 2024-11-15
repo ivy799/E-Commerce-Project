@@ -1,26 +1,23 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Store extends Model
+class Cart extends Model
 {
     protected $fillable = [
         'user_id',
-        'name',
-        'address',
-        'email',
-        'image',
-        'description',
+        'product_id',
+        'amount',
     ];
-
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function products()
+    public function product()
     {
-        return $this->hasMany(Product::class);
+        return $this->belongsTo(Product::class);
     }
 }

@@ -1,105 +1,98 @@
 @startuml
-entity "User" as user {
-  * ID : PK
-  --
-  * fullname
-  * username
-  * email
-  * alamat
-  * role
+entity User {
+    + user_id : INT
+    --
+    name : VARCHAR
+    email : VARCHAR
+    password : VARCHAR
+    address : VARCHAR
+    phone_number : VARCHAR
+    role : VARCHAR
 }
 
-entity "Store" as store {
-  * ID : PK
-  --
-  * name
-  * location
-  * email
-  * user_id : FK
+entity Cart {
+    + cart_id : INT
+    --
+    user_id : INT
+    created_at : DATETIME
 }
 
-entity "Products" as products {
-  * ID : PK
-  --
-  * store_id : FK
-  * product_details_id : FK
-  * name
-  * brand
-  * description
-  * price
-  * stock
-  * image
-  * category
-  * rating
+entity Fav {
+    + fav_id : INT
+    --
+    user_id : INT
+    product_id : INT
+    created_at : DATETIME
 }
 
-entity "Product Details" as product_details {
-  * ID : PK
-  --
-  * size
+entity Orders {
+    + order_id : INT
+    --
+    user_id : INT
+    order_date : DATETIME
+    arrival : DATETIME
+    status : VARCHAR
+    type : VARCHAR
+    buy_method : VARCHAR
+    total_price : DECIMAL
 }
 
-entity "Orders" as orders {
-  * ID : PK
-  --
-  * user_id : FK
-  * order_date
-  * estimated_arrival
-  * status
-  * total_amount
+entity Product {
+    + product_id : INT
+    --
+    store_id : INT
+    name : VARCHAR
+    description : TEXT
+    price : DECIMAL
+    stock : INT
+    image : VARCHAR
+    category : VARCHAR
 }
 
-entity "Order Details" as order_details {
-  * ID : PK
-  --
-  * order_id : FK
-  * product_id : FK
-  * quantity
-  * subtotal
+entity Comment_Rating {
+    + comment_id : INT
+    --
+    user_id : INT
+    product_id : INT
+    comment : TEXT
+    rating : DECIMAL
+    created_at : DATETIME
 }
 
-entity "Cart" as cart {
-  * ID : PK
-  --
-  * user_id : FK
-  * created_at
+entity Store {
+    + store_id : INT
+    --
+    user_id : INT
+    name : VARCHAR
+    email : VARCHAR
+    address : VARCHAR
+    image : VARCHAR
+    description : TEXT
+    created_at : DATETIME
 }
 
-entity "Cart Items" as cart_items {
-  * ID : PK
-  --
-  * cart_id : FK
-  * product_id : FK
-  * quantity
-}
+' Relationships
+User ||--o{ Cart : "has"
+User ||--o{ Orders : "places"
+User ||--o{ Fav : "favorites"
+User ||--|| Store : "owns"
+User ||--o{ Comment_Rating : "writes"
 
-entity "Favorite" as favorite {
-  * ID : PK
-  --
-  * user_id : FK
-  * product_id : FK
-}
+Cart }o--|| User : "belongs to"
+Cart }o--o{ Product : "contains"
 
-entity "Comment" as comment {
-  * ID : PK
-  --
-  * user_id : FK
-  * product_id : FK
-  * comment
-  * created_at
-}
+Fav }o--|| User : "favorited by"
+Fav }o--|| Product : "is"
 
-user ||--o{ store : "owns"
-store ||--o{ products : "manages"
-products ||--o{ product_details : "has details"
-user ||--o{ cart : "has"
-cart ||--o{ cart_items : "contains"
-cart_items ||--o| products : "includes"
-user ||--o{ orders : "places"
-orders ||--o{ order_details : "contains"
-order_details ||--o| products : "includes"
-user ||--o{ favorite : "marks"
-favorite ||--o| products : "includes"
-user ||--o{ comment : "writes"
-comment ||--o| products : "on"
+Orders }o--|| User : "belongs to"
+Orders }o--o{ Product : "contains"
+
+Product ||--o{ Comment_Rating : "reviewed by"
+Product }o--|| Store : "sold by"
+
+Comment_Rating }o--|| User : "written by"
+Comment_Rating }o--|| Product : "for"
+
+Store ||--o{ Product : "has"
+
 @enduml

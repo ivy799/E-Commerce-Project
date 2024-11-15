@@ -34,6 +34,7 @@ class UserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'address' => $request->address,
+            'phone_number' => $request->phone_number,
         ]);
 
         return redirect()->route('admin.users.index');

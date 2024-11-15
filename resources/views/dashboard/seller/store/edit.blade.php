@@ -21,9 +21,9 @@
                                 @enderror
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Location</label>
-                                <input type="text" name="location" value="{{ old('location', $store->location) }}" class="mt-1 block w-full text-black">
-                                @error('location')
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">address</label>
+                                <input type="text" name="address" value="{{ old('address', $store->address) }}" class="mt-1 block w-full text-black">
+                                @error('address')
                                     <span class="text-red-500 text-sm">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -31,6 +31,13 @@
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
                                 <input type="email" name="email" value="{{ old('email', $store->email) }}" class="mt-1 block w-full text-black">
                                 @error('email')
+                                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Description</label>
+                                <textarea name="description" class="mt-1 block w-full text-black" rows="4">{{ old('description', $store->description) }}</textarea>
+                                @error('description')
                                     <span class="text-red-500 text-sm">{{ $message }}</span>
                                 @enderror
                             </div>

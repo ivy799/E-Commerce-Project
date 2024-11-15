@@ -16,10 +16,6 @@
                             <input type="text" name="name" id="name" class="mt-1 block w-full" required>
                         </div>
                         <div class="mb-4">
-                            <label for="brand" class="block text-sm font-medium text-gray-700">Brand</label>
-                            <input type="text" name="brand" id="brand" class="mt-1 block w-full" required>
-                        </div>
-                        <div class="mb-4">
                             <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
                             <textarea name="description" id="description" class="mt-1 block w-full" required></textarea>
                         </div>
@@ -38,10 +34,6 @@
                         <div class="mb-4">
                             <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
                             <input type="text" name="category" id="category" class="mt-1 block w-full" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="rating" class="block text-sm font-medium text-gray-700">Rating</label>
-                            <input type="number" name="rating" id="rating" class="mt-1 block w-full" required>
                         </div>
                         <div class="mb-4">
                             <button type="submit" class="btn btn-primary">Create</button>

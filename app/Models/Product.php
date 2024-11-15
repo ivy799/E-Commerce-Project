@@ -8,22 +8,36 @@ class Product extends Model
     protected $fillable = [
         'store_id',
         'name',
-        'brand',
         'description',
         'price',
         'stock',
         'image',
         'category',
-        'rating',
     ];
+
+
+    public function comment_rating()
+    {
+        return $this->hasMany(Comment_Rating::class);
+    }
 
     public function store()
     {
         return $this->belongsTo(Store::class);
     }
 
-    public function product_details()
+    public function carts()
     {
-        return $this->hasMany(Product_details::class);
+        return $this->belongsTo(Cart::class);
+    }
+
+    public function orders()
+    {
+        return $this->belongsTo(Orders::class);
+    }
+
+    public function favorite()
+    {
+        return $this->belongsTo(Favorite::class);
     }
 }

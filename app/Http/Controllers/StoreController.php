@@ -33,19 +33,21 @@ class StoreController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'location' => 'nullable|string|max:255',
+            'address' => 'nullable|string|max:255',
             'email' => 'nullable|string|email|max:255',
             'image' => 'nullable|image|max:2048',
+            'description' => 'nullable|string|max:2048',
         ]);
 
         $imagePath = $request->file('image')?->store('store_images', 'public');
 
         Store::create([
-            'user_id' => \Illuminate\Support\Facades\Auth::user()->id,
+            'user_id' => Auth::user()->id,
             'name' => $request->name,
-            'location' => $request->location,
+            'address' => $request->address,
             'email' => $request->email,
             'image' => $imagePath,
+            'description' => $request->description,
         ]);
 
         return redirect()->route('seller.stores.index');
@@ -67,9 +69,10 @@ class StoreController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'location' => 'nullable|string|max:255',
+            'address' => 'nullable|string|max:255',
             'email' => 'nullable|string|email|max:255',
             'image' => 'nullable|image|max:2048',
+            'description' => 'nullable|string|max:2048',
         ]);
 
         $store = Store::findOrFail($id);
@@ -86,9 +89,10 @@ class StoreController extends Controller
 
         $store->update([
             'name' => $request->name,
-            'location' => $request->location,
+            'address' => $request->address,
             'email' => $request->email,
             'image' => $store->image,
+            'description' => $request->description,
         ]);
 
         return redirect()->route('seller.stores.index');

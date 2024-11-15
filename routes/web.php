@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProductBuyerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
@@ -8,12 +9,14 @@ use App\Http\Controllers\StoreController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Product_detailsController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CartController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
 Route::get('/dashboard', [HomeController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -65,6 +68,14 @@ Route::middleware(['auth', 'role:seller'])->group(function () {
     //     'update' => 'seller.product_details.update',
     //     'destroy' => 'seller.product_details.destroy',
     // ]);
+});
+
+Route::middleware(['auth', 'role:buyer'])->group(function () {
+    Route::get('/buyer/dashboard', [HomeController::class, 'index'])->name('buyer.dashboard');
+    Route::get('/buyer/products/{product}', [ProductBuyerController::class, 'show'])->name('buyer.products.show');
+    Route::post('/buyer/cart', [CartController::class, 'store'])->name('buyer.cart.store');
+    Route::get('/buyer/cart', [CartController::class, 'index'])->name('buyer.cart.index');
+    Route::patch('/buyer/cart/{cart}', [CartController::class, 'update'])->name('buyer.cart.update');
 });
 
 require __DIR__.'/auth.php';

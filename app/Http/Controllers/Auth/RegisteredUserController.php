@@ -34,6 +34,7 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
             'address' => ['required', 'string', 'max:255'],
+            'phone_number' => ['required', 'string', 'max:255'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -43,17 +44,19 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'address' => $request->address,
+            'phone_number' => $request->phone_number,
             'password' => Hash::make($request->password),
-            'role' => $role,
+            'role' => $role,                    
         ]);
 
         if ($role === 'seller') {
             Store::create([
                 'user_id' => $user->id,
                 'name' => 'Default Store Name', // Tambahkan data default untuk kolom name
-                'location' => 'Default Location', // Tambahkan data default untuk kolom location
+                'address' => 'Default Location', // Tambahkan data default untuk kolom location
                 'email' => $user->email, // Menggunakan email pengguna sebagai email store
                 'image' => 'default.png', // Tambahkan data default untuk kolom image
+                'description' => 'default description', // Tambahkan data default untuk kolom image
             ]);
         }
 

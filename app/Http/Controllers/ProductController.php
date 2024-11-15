@@ -25,13 +25,11 @@ class ProductController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'brand' => 'required',
             'description' => 'required',
             'price' => 'required',
             'stock' => 'required',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'category' => 'required',
-            'rating' => 'required',
         ]);
 
         $store = Store::where('user_id', Auth::id())->firstOrFail();
@@ -60,13 +58,11 @@ class ProductController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'brand' => 'required',
             'description' => 'required',
             'price' => 'required',
             'stock' => 'required',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'category' => 'required',
-            'rating' => 'required',
         ]);
 
         if ($request->hasFile('image')) {

@@ -17,6 +17,7 @@ class User extends Authenticatable
         'password',
         'address',
         'role',
+        'phone_number',
     ];
 
     protected $hidden = [
@@ -32,4 +33,21 @@ class User extends Authenticatable
     {
         return $this->hasOne(Store::class);
     }
+
+    public function cart()
+    {
+        return $this->hasMany(Cart::class);
+    }
+
+    public function favorite()
+    {
+        return $this->hasMany(Favorite::class);
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Orders::class);
+    }
+
+
 }

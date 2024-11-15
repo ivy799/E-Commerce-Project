@@ -3,29 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
 use App\Models\Product;
-use Illuminate\Support\Facades\Auth;
 
-class HomeController extends Controller
+class ProductBuyerController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        if (Auth::check()) {
-            if (Auth::user()->role == 'admin') {
-                $userCount = User::count();
-                return view('dashboard.admin.Home', compact('userCount'));
-            }elseif (Auth::user()->role == 'seller') {
-                return view('dashboard.seller.Home');
-            }
-            $products = Product::all();
-            return view('dashboard.buyer.home', compact('products'));
-        } else {
-            return redirect('login');
-        }
+        $products = Product::all();
+        return view('dashboard.buyer.home', compact('products'));
     }
 
     /**
@@ -49,7 +37,8 @@ class HomeController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $product = Product::findOrFail($id);
+        return view('dashboard.buyer.productDetails', compact('product'));
     }
 
     /**
