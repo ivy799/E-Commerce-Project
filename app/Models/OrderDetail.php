@@ -4,15 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Favorite extends Model
+class OrderDetail extends Model
 {
     protected $fillable = [
-        'user_id',
+        'order_id',
         'product_id',
+        'quantity',
+        'price',
     ];
-    public function user()
+
+    public function order()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Order::class);
     }
 
     public function product()
@@ -20,3 +23,4 @@ class Favorite extends Model
         return $this->belongsTo(Product::class);
     }
 }
+

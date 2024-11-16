@@ -36,7 +36,40 @@
                 @if(Auth::check() && Auth::user()->role === 'seller')
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                         <x-nav-link :href="route('seller.products.index')" :active="request()->routeIs('seller.products.index')">
-                            {{ __('Manage products') }}
+                            {{ __('Manage Products') }}
+                        </x-nav-link>
+                    </div>
+                @endif
+                
+                @if(Auth::check() && Auth::user()->role === 'seller')
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('seller.orders.index')" :active="request()->routeIs('seller.orders.index')">
+                            {{ __('Manage Orders') }}
+                        </x-nav-link>
+                    </div>
+                @endif
+            
+                
+                @if(Auth::check() && Auth::user()->role === 'buyer')
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('buyer.cart.index')" :active="request()->routeIs('buyer.cart.index')">
+                            {{ __('Cart') }}
+                        </x-nav-link>
+                    </div>
+                @endif
+                
+                @if(Auth::check() && Auth::user()->role === 'buyer')
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('buyer.favorites.index')" :active="request()->routeIs('buyer.favorites.index')">
+                            {{ __('Favorites') }}
+                        </x-nav-link>
+                    </div>
+                @endif
+                
+                @if(Auth::check() && Auth::user()->role === 'buyer')
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('buyer.orders.index')" :active="request()->routeIs('buyer.orders.index')">
+                            {{ __('Orders') }}
                         </x-nav-link>
                     </div>
                 @endif

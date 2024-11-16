@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('orders', function (Blueprint $table) {
-            $table->id();
+            $table->id(); // Ensure the primary key is 'id'
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamp('order_date')->useCurrent();
             $table->timestamp('estimated_arrival')->useCurrent();

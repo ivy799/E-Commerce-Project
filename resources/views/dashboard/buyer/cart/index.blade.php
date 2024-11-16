@@ -18,47 +18,58 @@
                     @if($cartItems->isEmpty())
                         <p class="text-gray-600 dark:text-gray-400">Your cart is empty.</p>
                     @else
-                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                            <thead>
-                                <tr>
-                                    <th class="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                        Product
-                                    </th>
-                                    <th class="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                        Amount
-                                    </th>
-                                    <th class="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                                        Price
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                                @foreach($cartItems as $item)
+                        <form action="{{ route('buyer.orders.create') }}" method="GET">
+                            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                                <thead>
                                     <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="flex items-center">
-                                                <div class="ml-4">
-                                                    <div class="text-sm font-medium text-gray-900 dark:text-gray-100">
-                                                        {{ $item->product->name }}
+                                        <th class="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                            Select
+                                        </th>
+                                        <th class="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                            Product
+                                        </th>
+                                        <th class="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                            Amount
+                                        </th>
+                                        <th class="px-6 py-3 bg-gray-50 dark:bg-gray-700 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                            Price
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                                    @foreach($cartItems as $item)
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <input type="checkbox" name="cart_items[]" value="{{ $item->id }}">
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <div class="flex items-center">
+                                                    <div class="ml-4">
+                                                        <div class="text-sm font-medium text-gray-900 dark:text-gray-100">
+                                                            {{ $item->product->name }}
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <form action="{{ route('buyer.cart.update', $item->id) }}" method="POST">
-                                                @csrf
-                                                @method('PATCH')
-                                                <input type="number" name="amount" value="{{ $item->amount }}" min="1" class="text-sm text-gray-900 dark:text-gray-100">
-                                                <button type="submit" class="ml-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 rounded-lg shadow">Update</button>
-                                            </form>
-                                        </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-900 dark:text-gray-100">${{ number_format($item->product->price, 2) }}</div>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <form action="{{ route('buyer.cart.update', $item->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('PATCH')
+                                                    <input type="number" name="amount" value="{{ $item->amount }}" min="1" class="text-sm text-gray-900 dark:text-gray-100">
+                                                    <button type="submit" class="ml-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 rounded-lg shadow">Update</button>
+                                                </form>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <div class="text-sm text-gray-900 dark:text-gray-100">${{ number_format($item->product->price, 2) }}</div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                            <div class="mt-6">
+                                <button type="submit" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow">Checkout</button>
+                            </div>
+                        </form>
                     @endif
                 </div>
             </div>

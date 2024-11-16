@@ -8,8 +8,10 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Product_detailsController;
+use App\Http\Controllers\FavoriteController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrderController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -68,6 +70,10 @@ Route::middleware(['auth', 'role:seller'])->group(function () {
     //     'update' => 'seller.product_details.update',
     //     'destroy' => 'seller.product_details.destroy',
     // ]);
+
+    Route::get('/seller/orders', [OrderController::class, 'sellerOrderList'])->name('seller.orders.index');
+    Route::get('/seller/orders/{order}', [OrderController::class, 'show'])->name('seller.orders.show');
+    Route::get('/seller/orders/all', [OrderController::class, 'allOrdersFromBuyers'])->name('seller.orders.all');
 });
 
 Route::middleware(['auth', 'role:buyer'])->group(function () {
@@ -76,6 +82,19 @@ Route::middleware(['auth', 'role:buyer'])->group(function () {
     Route::post('/buyer/cart', [CartController::class, 'store'])->name('buyer.cart.store');
     Route::get('/buyer/cart', [CartController::class, 'index'])->name('buyer.cart.index');
     Route::patch('/buyer/cart/{cart}', [CartController::class, 'update'])->name('buyer.cart.update');
+
+    Route::resource('/buyer/favorites', FavoriteController::class)->names([
+        'index' => 'buyer.favorites.index',
+        'store' => 'buyer.favorites.store',
+        'destroy' => 'buyer.favorites.destroy',
+    ]);
+
+    Route::resource('/buyer/orders', OrderController::class)->only(['create', 'store']);
+    Route::get('/buyer/orders/create', [OrderController::class, 'create'])->name('buyer.orders.create');
+    Route::post('/buyer/orders', [OrderController::class, 'store'])->name('buyer.orders.store');
+    Route::post('/buyer/orders/details', [OrderController::class, 'storeOrderDetails'])->name('buyer.orders.details.store');
+    Route::get('/buyer/orders', [OrderController::class, 'index'])->name('buyer.orders.index');
+    Route::get('/buyer/orders/{order}', [OrderController::class, 'show'])->name('buyer.orders.show');
 });
 
 require __DIR__.'/auth.php';

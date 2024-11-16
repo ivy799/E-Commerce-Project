@@ -41,6 +41,16 @@
                                     Add to Cart
                                 </button>
                             </form>
+                            <form action="{{ route('buyer.favorites.store') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                <button 
+                                    type="submit"
+                                    class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded-lg shadow"
+                                >
+                                    Add to Favorites
+                                </button>
+                            </form>
                             <button 
                                 class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow"
                             >

@@ -49,6 +49,15 @@ entity Product {
     category : VARCHAR
 }
 
+entity Order_Details {
+    + order_detail_id : INT
+    --
+    order_id : INT
+    product_id : INT
+    quantity : INT
+    price : DECIMAL
+}
+
 entity Comment_Rating {
     + comment_id : INT
     --
@@ -85,7 +94,10 @@ Fav }o--|| User : "favorited by"
 Fav }o--|| Product : "is"
 
 Orders }o--|| User : "belongs to"
-Orders }o--o{ Product : "contains"
+Orders ||--o{ Order_Details : "contains"
+
+Order_Details }o--|| Orders : "part of"
+Order_Details }o--|| Product : "includes"
 
 Product ||--o{ Comment_Rating : "reviewed by"
 Product }o--|| Store : "sold by"

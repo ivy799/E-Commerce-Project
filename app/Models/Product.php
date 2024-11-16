@@ -33,11 +33,17 @@ class Product extends Model
 
     public function orders()
     {
-        return $this->belongsTo(Orders::class);
+        return $this->belongsToMany(Order::class, 'order_product')->withPivot('amount');
     }
 
     public function favorite()
     {
         return $this->belongsTo(Favorite::class);
+    }
+
+    // Relasi ke OrderDetails
+    public function orderDetails()
+    {
+        return $this->hasMany(OrderDetail::class, 'product_id', 'id');
     }
 }
