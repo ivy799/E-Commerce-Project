@@ -16,12 +16,13 @@ class RoleMiddleware
      * @param  string  $role
      * @return mixed
      */
-    public function handle(Request $request, Closure $next, $role)
-    {
-        if (!Auth::check() || Auth::user()->role !== $role) {
-            abort(403, 'Unauthorized action.');
-        }
-
+    public function handle($request, Closure $next, $role)
+{
+    if (Auth::check() && (Auth::user()->role === $role || Auth::user()->role === 'admin')) {
         return $next($request);
     }
+
+    abort(403, 'Unauthorized.');
+}
+
 }

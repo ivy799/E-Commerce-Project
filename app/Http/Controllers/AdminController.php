@@ -12,4 +12,10 @@ class AdminController extends Controller
         $users = User::all();
         return view('admin.dashboard', compact('users'));
     }
+
+    public function adminHome()
+    {
+        $userCount = User::count();
+        return view('dashboard.admin.AdminHome', compact('userCount'));
+    }
 }

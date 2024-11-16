@@ -10,17 +10,39 @@
                     </a>
                 </div>
 
-                <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
-                </div>
+                @if(Auth::check() && Auth::user()->role === 'admin')
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('admin.home')" :active="request()->routeIs('admin.home')">
+                            {{ __('Dashboard') }}
+                        </x-nav-link>
+                    </div>
+                @endif
 
                 @if(Auth::check() && Auth::user()->role === 'admin')
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                         <x-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.index')">
                             {{ __('Manage Users') }}
+                        </x-nav-link>
+                    </div>
+                @endif
+
+                <!-- Navigation Links -->
+                @if(Auth::check() && Auth::user()->role === 'admin')
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                            {{ __('Store') }}
+                        </x-nav-link>
+                    </div>
+                @elseif(Auth::check() && Auth::user()->role === 'seller')
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                            {{ __('Dashboard') }}
+                        </x-nav-link>
+                    </div>
+                @elseif(Auth::check() && Auth::user()->role === 'buyer')
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                            {{ __('Home') }}
                         </x-nav-link>
                     </div>
                 @endif
@@ -67,6 +89,30 @@
                 @endif
                 
                 @if(Auth::check() && Auth::user()->role === 'buyer')
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('buyer.orders.index')" :active="request()->routeIs('buyer.orders.index')">
+                            {{ __('Orders') }}
+                        </x-nav-link>
+                    </div>
+                @endif
+
+                @if(Auth::check() && Auth::user()->role === 'admin')
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('buyer.cart.index')" :active="request()->routeIs('buyer.cart.index')">
+                            {{ __('Cart') }}
+                        </x-nav-link>
+                    </div>
+                @endif
+                
+                @if(Auth::check() && Auth::user()->role === 'admin')
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('buyer.favorites.index')" :active="request()->routeIs('buyer.favorites.index')">
+                            {{ __('Favorites') }}
+                        </x-nav-link>
+                    </div>
+                @endif
+                
+                @if(Auth::check() && Auth::user()->role === 'admin')
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                         <x-nav-link :href="route('buyer.orders.index')" :active="request()->routeIs('buyer.orders.index')">
                             {{ __('Orders') }}
