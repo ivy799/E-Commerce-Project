@@ -92,4 +92,15 @@ class ProductController extends Controller
         return redirect()->route('seller.products.index')
                          ->with('success', 'Product deleted successfully.');
     }
+
+    public function createOrder(Request $request)
+    {
+        $product = null;
+        if ($request->has('product_id')) {
+            $product = Product::findOrFail($request->input('product_id'));
+        }
+        $cartItems = []; // Initialize as an empty array
+        // Add logic to populate $cartItems if needed
+        return view('dashboard.buyer.order.create', compact('product', 'cartItems'));
+    }
 }

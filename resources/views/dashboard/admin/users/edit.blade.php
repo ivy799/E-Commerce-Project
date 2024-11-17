@@ -14,7 +14,7 @@
                         @method('PUT')
                         <div class="grid grid-cols-1 gap-6 mt-4">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nama</label>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Name</label>
                                 <input type="text" name="name" value="{{ old('name', $user->name) }}" class="mt-1 block w-full text-black" required>
                                 @error('name')
                                     <span class="text-red-500 text-sm">{{ $message }}</span>
@@ -35,9 +35,16 @@
                                 @enderror
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Alamat Pengiriman</label>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Address</label>
                                 <input type="text" name="address" value="{{ old('address', $user->address) }}" class="mt-1 block w-full text-black" required>
                                 @error('address')
+                                    <span class="text-red-500 text-sm">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Phone number</label>
+                                <input type="text" name="phone_number" value="{{ old('phone_number', $user->phone_number) }}" class="mt-1 block w-full text-black" required>
+                                @error('phone_number')
                                     <span class="text-red-500 text-sm">{{ $message }}</span>
                                 @enderror
                             </div>

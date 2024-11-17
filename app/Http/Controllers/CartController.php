@@ -39,7 +39,8 @@ class CartController extends Controller
                         ->first();
 
         if ($cartItem) {
-            $cartItem->update(['amount' => $cartItem->amount + 1]);
+            $cartItem->amount += 1;
+            $cartItem->save();
         } else {
             Cart::create([
                 'user_id' => Auth::id(),
@@ -72,11 +73,16 @@ class CartController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $cartItem = Cart::where('id', $id)->where('user_id', Auth::id())->first();
+
+        if (!$cartItem || !$cartItem->product) {
+            return redirect()->route('buyer.cart.index')->with('error', 'Item not found or product is missing.');
+        }
+
         $request->validate([
             'amount' => 'required|integer|min:1',
         ]);
 
-        $cartItem = Cart::where('user_id', Auth::id())->findOrFail($id);
         $cartItem->update(['amount' => $request->amount]);
 
         return redirect()->route('buyer.cart.index')->with('success', 'Cart updated successfully.');

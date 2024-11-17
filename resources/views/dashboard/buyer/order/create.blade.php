@@ -57,6 +57,9 @@
                                     @endphp
                                     <li>{{ $item->product->name }} - ${{ number_format($item->product->price, 2) }} x {{ $item->amount }}</li>
                                     <input type="hidden" name="cart_items[]" value="{{ $item->id }}">
+                                    <input type="hidden" name="product_ids[]" value="{{ $item->product->id }}">
+                                    <input type="hidden" name="amounts[]" value="{{ $item->amount }}">
+                                    <input type="hidden" name="prices[]" value="{{ $item->product->price }}">
                                 @endforeach
                             </ul>
                             <p class="mt-4 text-2xl text-red-600 dark:text-red-400 font-semibold">Total Amount: ${{ number_format($totalAmount, 2) }}</p>

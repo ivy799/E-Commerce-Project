@@ -23,7 +23,13 @@
                                         <form action="{{ route('buyer.cart.store') }}" method="POST">
                                             @csrf
                                             <input type="hidden" name="product_id" value="{{ $favorite->product->id }}">
-                                            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow">Add to Cart</button>
+                                            <input type="hidden" name="amount" value="1"> <!-- Tetapkan nilai amount default -->
+                                            <button 
+                                                type="submit"
+                                                class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow"
+                                            >
+                                                Add to Cart
+                                            </button>
                                         </form>
                                         <form action="{{ route('buyer.favorites.destroy', $favorite->id) }}" method="POST">
                                             @csrf

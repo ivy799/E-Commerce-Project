@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Cart;
 use App\Models\Order;
+use App\Models\Product; // Add this line
 use Illuminate\Support\Facades\Auth;
 use App\Models\OrderDetail;
 use Illuminate\Support\Facades\Gate;
@@ -16,7 +17,18 @@ class OrderController extends Controller
      */
     public function create(Request $request)
     {
-        $cartItems = Cart::whereIn('id', $request->cart_items)->where('user_id', Auth::id())->with('product')->get();
+        $cartItems = Cart::whereIn('id', $request->cart_items)
+                         ->orWhere(function ($query) use ($request) {
+                             $query->where('user_id', Auth::id())
+                                   ->where('product_id', $request->cart_items);
+                         })
+                         ->with('product')
+                         ->get();
+
+        if ($cartItems->isEmpty()) {
+            return redirect()->route('buyer.cart.index')->with('error', 'No items selected for checkout.');
+        }
+
         return view('dashboard.buyer.order.create', compact('cartItems'));
     }
 
@@ -85,6 +97,18 @@ class OrderController extends Controller
         ]);
 
         $cartItems = Cart::whereIn('id', $request->cart_items)->where('user_id', Auth::id())->get();
+        if ($cartItems->isEmpty()) {
+            $productIds = is_array($request->cart_items) ? $request->cart_items : [$request->cart_items];
+            $products = Product::whereIn('id', $productIds)->get();
+            $cartItems = $products->map(function ($product) {
+                return (object)[
+                    'product_id' => $product->id,
+                    'amount' => 1,
+                    'product' => $product,
+                ];
+            });
+        }
+
         foreach ($cartItems as $item) {
             OrderDetail::create([
                 'order_id' => $order->id,
@@ -128,5 +152,32 @@ class OrderController extends Controller
         })->with('orderDetails.product')->get();
 
         return view('dashboard.seller.orderList.allOrders', compact('orders'));
+    }
+
+    // public function buyNow($productId)
+    // {
+    //     $product = Product::findOrFail($productId);
+    //     $cartItems = collect([
+    //         (object)[
+    //             'id' => $product->id,
+    //             'product' => $product,
+    //             'amount' => 1,
+    //         ]
+    //     ]);
+    //     return view('dashboard.buyer.order.create', compact('cartItems'));
+    // }
+
+    public function checkout(Request $request)
+    {
+        $cartItems = Cart::whereIn('id', $request->cart_items)
+                         ->where('user_id', Auth::id())
+                         ->with('product')
+                         ->get();
+
+        if ($cartItems->isEmpty()) {
+            return redirect()->route('buyer.cart.index')->with('error', 'No items selected for checkout.');
+        }
+
+        return view('dashboard.buyer.order.create', compact('cartItems'));
     }
 }

@@ -91,8 +91,10 @@ Route::middleware(['auth', 'role:buyer'])->group(function () {
     Route::get('/buyer/orders/create', [OrderController::class, 'create'])->name('buyer.orders.create');
     Route::post('/buyer/orders', [OrderController::class, 'store'])->name('buyer.orders.store');
     Route::post('/buyer/orders/details', [OrderController::class, 'storeOrderDetails'])->name('buyer.orders.details.store');
+    Route::post('/buyer/orders/checkout', [OrderController::class, 'checkout'])->name('buyer.orders.checkout');
     Route::get('/buyer/orders', [OrderController::class, 'index'])->name('buyer.orders.index');
     Route::get('/buyer/orders/{order}', [OrderController::class, 'show'])->name('buyer.orders.show');
+    // Route::get('/buyer/orders/buy-now/{product}', [OrderController::class, 'buyNow'])->name('buyer.orders.buyNow');
 });
 
 require __DIR__ . '/auth.php';

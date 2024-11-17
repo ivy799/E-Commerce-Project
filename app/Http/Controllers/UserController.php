@@ -27,6 +27,7 @@ class UserController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
             'address' => 'required|string|max:255',
+            'phone_number' => 'required|string|max:15',
         ]);
 
         User::create([
@@ -53,13 +54,15 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-            'alamat_pengiriman' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+            'phone_number' => 'required|string|max:15',
         ]);
 
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
-            'alamat_pengiriman' => $request->alamat_pengiriman,
+            'address' => $request->address,
+            'phone_number' => $request->phone_number,
         ]);
 
         if ($request->password) {

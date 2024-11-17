@@ -52,6 +52,7 @@
                                 </button>
                             </form>
                             <button 
+                                onclick="window.location.href='{{ route('buyer.orders.create', ['cart_items[]' => $product->id]) }}'"
                                 class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow"
                             >
                                 Buy Now

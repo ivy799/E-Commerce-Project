@@ -28,6 +28,10 @@
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Address</label>
                                 <input type="text" name="address" class="mt-1 block w-full text-black" required>
                             </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Phone number</label>
+                                <input type="text" name="phone_number" class="mt-1 block w-full text-black" required>
+                            </div>
                         </div>
                         <div class="mt-4">
                             <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Create User</button>
