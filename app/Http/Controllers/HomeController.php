@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Product;
+use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
@@ -19,8 +20,13 @@ class HomeController extends Controller
                 $products = Product::all();
                 $userCount = User::count();
                 return view('dashboard.admin.Home', compact('userCount', 'products'));
-            }elseif (Auth::user()->role == 'seller') {
-                return view('dashboard.seller.Home');
+            } elseif (Auth::user()->role == 'seller') {
+                $store = Auth::user()->store;
+                $productCount = $store->products()->count();
+                $orderCount = Order::whereHas('orderDetails.product.store', function ($query) {
+                    $query->where('user_id', Auth::id());
+                })->count();
+                return view('dashboard.seller.Home', compact('productCount', 'orderCount'));
             }
             $products = Product::all();
             return view('dashboard.buyer.home', compact('products'));

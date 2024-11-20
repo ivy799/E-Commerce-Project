@@ -14,9 +14,8 @@ use App\Http\Controllers\{
 };
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [ProductController::class, 'welcome'])->name('welcome');
+Route::get('/product/{product}', [ProductController::class, 'show'])->name('product.show');
 
 Route::get('/dashboard', [HomeController::class, 'index'])
     ->middleware(['auth', 'verified'])
@@ -70,6 +69,7 @@ Route::middleware(['auth', 'role:seller'])->group(function () {
     Route::get('/seller/orders', [OrderController::class, 'sellerOrderList'])->name('seller.orders.index');
     Route::get('/seller/orders/{order}', [OrderController::class, 'show'])->name('seller.orders.show');
     Route::get('/seller/orders/all', [OrderController::class, 'allOrdersFromBuyers'])->name('seller.orders.all');
+    Route::patch('/seller/orders/{order}/ship', [OrderController::class, 'shipOrder'])->name('seller.orders.ship');
 });
 
 Route::middleware(['auth', 'role:buyer'])->group(function () {
@@ -80,6 +80,7 @@ Route::middleware(['auth', 'role:buyer'])->group(function () {
     Route::post('/buyer/cart', [CartController::class, 'store'])->name('buyer.cart.store');
     Route::get('/buyer/cart', [CartController::class, 'index'])->name('buyer.cart.index');
     Route::patch('/buyer/cart/{cart}', [CartController::class, 'update'])->name('buyer.cart.update');
+    Route::delete('/buyer/cart/{cart}', [CartController::class, 'destroy'])->name('buyer.cart.destroy');
 
     Route::resource('/buyer/favorites', FavoriteController::class)->names([
         'index'   => 'buyer.favorites.index',
@@ -94,6 +95,7 @@ Route::middleware(['auth', 'role:buyer'])->group(function () {
     Route::post('/buyer/orders/checkout', [OrderController::class, 'checkout'])->name('buyer.orders.checkout');
     Route::get('/buyer/orders', [OrderController::class, 'index'])->name('buyer.orders.index');
     Route::get('/buyer/orders/{order}', [OrderController::class, 'show'])->name('buyer.orders.show');
+    Route::get('/buyer/orders/buy-now/{product}', [OrderController::class, 'buyNow'])->name('buyer.orders.buyNow');
     // Route::get('/buyer/orders/buy-now/{product}', [OrderController::class, 'buyNow'])->name('buyer.orders.buyNow');
 });
 

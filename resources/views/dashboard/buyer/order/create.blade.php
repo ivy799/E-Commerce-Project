@@ -31,17 +31,16 @@
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Type</label>
                                 <select name="type" id="type" class="mt-1 block w-full" required>
-                                    <option value="a">A</option>
-                                    <option value="b">B</option>
-                                    <option value="c">C</option>
+                                    <option value="a">Fast</option>
+                                    <option value="b">Low</option>
                                 </select>
                             </div>
                             <div>
                                 <label for="buy_method" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Buy Method</label>
                                 <select name="buy_method" id="buy_method" class="mt-1 block w-full" required>
-                                    <option value="a">A</option>
-                                    <option value="b">B</option>
-                                    <option value="c">C</option>
+                                    <option value="a">Gopay</option>
+                                    <option value="b">Ovo</option>
+                                    <option value="c">ShopeePay</option>
                                 </select>
                             </div>
                         </div>

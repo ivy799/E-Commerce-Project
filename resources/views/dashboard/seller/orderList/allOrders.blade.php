@@ -21,6 +21,15 @@
                                     <li>{{ $detail->product->name }} - {{ $detail->quantity }} x ${{ $detail->price }}</li>
                                 @endforeach
                             </ul>
+                            @if ($order->status === 'Pending')
+                                <form action="{{ route('seller.orders.ship', $order->id) }}" method="POST">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow">
+                                        {{ __('Ship Order') }}
+                                    </button>
+                                </form>
+                            @endif
                         </div>
                     @endforeach
                 </div>

@@ -93,6 +93,14 @@ class CartController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $cartItem = Cart::where('id', $id)->where('user_id', Auth::id())->first();
+
+        if (!$cartItem) {
+            return redirect()->route('buyer.cart.index')->with('error', 'Item not found.');
+        }
+
+        $cartItem->delete();
+
+        return redirect()->route('buyer.cart.index')->with('success', 'Item removed from cart.');
     }
 }

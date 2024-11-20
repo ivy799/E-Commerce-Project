@@ -46,7 +46,7 @@ class ProductController extends Controller
 
     public function show(Product $product)
     {
-        return view('dashboard.seller.product.show', compact('product'));
+        return view('dashboard.buyer.productDetails', compact('product'));
     }
 
     public function edit(Product $product)
@@ -102,5 +102,11 @@ class ProductController extends Controller
         $cartItems = []; // Initialize as an empty array
         // Add logic to populate $cartItems if needed
         return view('dashboard.buyer.order.create', compact('product', 'cartItems'));
+    }
+
+    public function welcome()
+    {
+        $products = Product::all();
+        return view('welcome', compact('products'));
     }
 }
