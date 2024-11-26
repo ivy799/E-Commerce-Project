@@ -1,9 +1,9 @@
 <x-app-layout>
-    <x-slot name="header">
+    {{-- <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 light:text-gray-200 leading-tight">
             {{ __('Favorite Products') }}
         </h2>
-    </x-slot>
+    </x-slot> --}}
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -18,7 +18,7 @@
                                     <img src="{{ asset('storage/' . $favorite->product->image) }}" alt="{{ $favorite->product->name }}" class="w-full h-48 object-cover rounded-lg">
                                     <h3 class="mt-4 text-lg font-bold text-gray-900 light:text-gray-100">{{ $favorite->product->name }}</h3>
                                     <p class="mt-2 text-gray-700 light:text-gray-300">{{ $favorite->product->description }}</p>
-                                    <p class="mt-2 text-red-600 light:text-red-400 font-semibold">${{ number_format($favorite->product->price, 2) }}</p>
+                                    <p class="mt-2 text-black light:text-red-400 font-semibold">${{ number_format($favorite->product->price, 2) }}</p>
                                     <div class="mt-4 flex space-x-4">
                                         <form action="{{ route('buyer.cart.store') }}" method="POST">
                                             @csrf
@@ -26,7 +26,7 @@
                                             <input type="hidden" name="amount" value="1"> <!-- Tetapkan nilai amount default -->
                                             <button 
                                                 type="submit"
-                                                class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow"
+                                                class="bg-white hover:bg-black hover:text-white text-black font-semibold py-2 px-4 rounded-lg shadow"
                                             >
                                                 Add to Cart
                                             </button>
@@ -34,7 +34,7 @@
                                         <form action="{{ route('buyer.favorites.destroy', $favorite->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg shadow">Remove</button>
+                                            <button type="submit" class="bg-black hover:bg-white hover:text-black text-white font-semibold py-2 px-4 rounded-lg shadow">Remove</button>
                                         </form>
                                     </div>
                                 </div>

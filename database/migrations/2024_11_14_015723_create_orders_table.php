@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamp('order_date')->useCurrent();
             $table->timestamp('estimated_arrival')->useCurrent();
-            $table->enum('status', ['Pending', 'Shipped', 'Delivered', 'Cancelled']);
+            $table->enum('status', ['Pending', 'Shipped', 'Arrived', 'Cancelled']);
             $table->string('type');
             $table->string('buy_method');
             $table->decimal('total_amount', 10, 2);

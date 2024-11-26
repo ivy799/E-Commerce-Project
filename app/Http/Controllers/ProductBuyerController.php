@@ -37,7 +37,7 @@ class ProductBuyerController extends Controller
      */
     public function show(string $id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::with('store')->findOrFail($id);
         return view('dashboard.buyer.productDetails', compact('product'));
     }
 

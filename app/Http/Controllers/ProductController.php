@@ -107,6 +107,26 @@ class ProductController extends Controller
     public function welcome()
     {
         $products = Product::all();
-        return view('welcome', compact('products'));
+        $categories = Product::select('category')->distinct()->pluck('category');
+        $recommendedProducts = Product::inRandomOrder()->take(3)->get();
+        return view('welcome', compact('products', 'categories', 'recommendedProducts'));
+    }
+
+    public function adminIndex()
+    {
+        $products = Product::all();
+        return view('dashboard.admin.product.product', compact('products'));
+    }
+
+    public function adminDestroy(Product $product)
+    {
+        if ($product->image) {
+            Storage::disk('public')->delete($product->image);
+        }
+
+        $product->delete();
+
+        return redirect()->route('admin.products.index')
+                         ->with('success', 'Product deleted successfully.');
     }
 }

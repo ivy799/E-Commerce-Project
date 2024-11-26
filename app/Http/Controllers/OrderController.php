@@ -87,7 +87,7 @@ class OrderController extends Controller
             'total_amount' => $request->total_amount,
             'status' => 'Pending',
             'order_date' => now(),
-            'estimated_arrival' => now()->addDays(7),
+            'estimated_arrival' => now()->addMinute(),
         ]);
 
         $cartItems = Cart::whereIn('id', $request->cart_items)->where('user_id', Auth::id())->get();
@@ -161,7 +161,7 @@ class OrderController extends Controller
         if (Gate::denies('view', $order)) {
             abort(403);
         }
-        $order->load('orderDetails.product');
+        $order->load('orderDetails.product.comments');
         return view('dashboard.buyer.order.show', compact('order'));
     }
 
@@ -226,7 +226,7 @@ class OrderController extends Controller
             $product->save();
         }
 
-        $order->status = 'Shipping';
+        $order->status = 'Shipped'; // Ensure the status is a string
         $order->save();
 
         return redirect()->back()->with('success', 'Order status updated to shipping.');

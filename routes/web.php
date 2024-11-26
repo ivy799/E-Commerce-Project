@@ -10,13 +10,25 @@ use App\Http\Controllers\{
     ProductController,
     FavoriteController,
     CartController,
-    OrderController
+    OrderController,
+    CommentRatingController
 };
 use Illuminate\Support\Facades\Route;
 
+
+// Public Routes
 Route::get('/', [ProductController::class, 'welcome'])->name('welcome');
 Route::get('/product/{product}', [ProductController::class, 'show'])->name('product.show');
+Route::get('/search', [HomeController::class, 'search'])->name('search');
+Route::get('/filter', [HomeController::class, 'filter'])->name('filter');
+Route::get('/welcome/search', [HomeController::class, 'welcomeSearch'])->name('welcome.search');
+Route::get('/welcome/filter', [HomeController::class, 'welcomeFilter'])->name('welcome.filter');
 
+
+
+
+
+// Authenticated Routes
 Route::get('/dashboard', [HomeController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
@@ -27,9 +39,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+
+
+
+
+// Admin Routes
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
-
     Route::resource('/admin/users', UserController::class)->names([
         'index'   => 'admin.users.index',
         'create'  => 'admin.users.create',
@@ -39,10 +55,16 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         'update'  => 'admin.users.update',
         'destroy' => 'admin.users.destroy',
     ]);
-
     Route::get('/admin/home', [AdminController::class, 'adminHome'])->name('admin.home');
+    Route::get('/admin/products', [ProductController::class, 'adminIndex'])->name('admin.products.index');
+    Route::delete('/admin/products/{product}', [ProductController::class, 'adminDestroy'])->name('admin.products.destroy');
 });
 
+
+
+
+
+// Seller Routes
 Route::middleware(['auth', 'role:seller'])->group(function () {
     Route::get('/seller/dashboard', [HomeController::class, 'index'])->name('seller.dashboard');
 
@@ -72,9 +94,16 @@ Route::middleware(['auth', 'role:seller'])->group(function () {
     Route::patch('/seller/orders/{order}/ship', [OrderController::class, 'shipOrder'])->name('seller.orders.ship');
 });
 
+
+
+
+
+
+
+
+// Buyer Routes
 Route::middleware(['auth', 'role:buyer'])->group(function () {
     Route::get('/buyer/dashboard', [HomeController::class, 'index'])->name('buyer.dashboard');
-
     Route::get('/buyer/products/{product}', [ProductBuyerController::class, 'show'])->name('buyer.products.show');
 
     Route::post('/buyer/cart', [CartController::class, 'store'])->name('buyer.cart.store');
@@ -96,7 +125,7 @@ Route::middleware(['auth', 'role:buyer'])->group(function () {
     Route::get('/buyer/orders', [OrderController::class, 'index'])->name('buyer.orders.index');
     Route::get('/buyer/orders/{order}', [OrderController::class, 'show'])->name('buyer.orders.show');
     Route::get('/buyer/orders/buy-now/{product}', [OrderController::class, 'buyNow'])->name('buyer.orders.buyNow');
-    // Route::get('/buyer/orders/buy-now/{product}', [OrderController::class, 'buyNow'])->name('buyer.orders.buyNow');
+    Route::post('/products/{product}/comments', [CommentRatingController::class, 'store'])->name('comments.store');
 });
 
 require __DIR__ . '/auth.php';

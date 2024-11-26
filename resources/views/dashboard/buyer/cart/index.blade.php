@@ -39,8 +39,8 @@
                                             <form action="{{ route('buyer.cart.update', $item->id) }}" method="POST">
                                                 @csrf
                                                 @method('PATCH')
-                                                <input type="number" name="amount" value="{{ $item->amount }}" min="1" class="text-sm text-gray-900">
-                                                <button type="submit" class="ml-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 rounded-lg shadow">Update</button>
+                                                <input type="number" name="amount" value="{{ $item->amount }}" min="1" class="text-sm text-gray-900 rounded-full">
+                                                <button type="submit" class="ml-2 bg-white hover:bg-black hover:text-white text-black font-semibold py-1 px-2 rounded-lg shadow">Update</button>
                                             </form>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
@@ -50,7 +50,7 @@
                                             <form action="{{ route('buyer.cart.destroy', $item->id) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg shadow">
+                                                <button type="submit" class="bg-black hover:bg-white hover:text-black text-white font-semibold py-2 px-4 rounded-lg shadow">
                                                     Remove
                                                 </button>
                                             </form>
@@ -64,7 +64,7 @@
                         <form action="{{ route('buyer.orders.checkout') }}" method="POST" class="mt-6">
                             @csrf
                             <div id="selected-cart-items"></div>
-                            <button type="submit" id="checkout-button" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow" disabled>Checkout</button>
+                            <button type="submit" id="checkout-button" class="bg-black hover:bg-white hover:text-black text-white font-semibold py-2 px-4 rounded-lg shadow" disabled>Checkout</button>
                         </form>
 
                         <script>

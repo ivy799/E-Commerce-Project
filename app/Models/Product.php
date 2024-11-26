@@ -46,4 +46,9 @@ class Product extends Model
     {
         return $this->hasMany(OrderDetail::class, 'product_id', 'id');
     }
+
+    public function comments()
+    {
+        return $this->hasMany(CommentRating::class, 'product_id', 'id')->whereNotNull('product_id');
+    }
 }
