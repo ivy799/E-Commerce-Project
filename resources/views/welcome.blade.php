@@ -23,6 +23,9 @@
                 scroll-behavior: smooth;
             }
         </style>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+        
     </head>
     <body class="font-sans antialiased light:bg-black dark:text-white/50">
         <div class="bg-gray-50 text-black/50 light:bg-black dark:text-white/50">
@@ -44,19 +47,19 @@
                                     </a>
                                 @else
                                     <a
-                                        href="{{ route('register') }}"
+                                        href="{{ route('login') }}"
                                         class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-black dark:hover:text-white/80 dark:focus-visible:ring-white"
                                     >
                                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Zm0-108q96-86 158-147.5t98-107q36-45.5 50-81t14-70.5q0-60-40-100t-100-40q-47 0-87 26.5T518-680h-76q-15-41-55-67.5T300-774q-60 0-100 40t-40 100q0 35 14 70.5t50 81q36 45.5 98 107T480-228Zm0-273Z"/></svg>                                    </a>
                                     <a
-                                        href="{{ route('register') }}"
+                                        href="{{ route('login') }}"
                                         class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-black dark:hover:text-white/80 dark:focus-visible:ring-white"
                                     >
                                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M280-80q-33 0-56.5-23.5T200-160q0-33 23.5-56.5T280-240q33 0 56.5 23.5T360-160q0 33-23.5 56.5T280-80Zm400 0q-33 0-56.5-23.5T600-160q0-33 23.5-56.5T680-240q33 0 56.5 23.5T760-160q0 33-23.5 56.5T680-80ZM246-720l96 200h280l110-200H246Zm-38-80h590q23 0 35 20.5t1 41.5L692-482q-11 20-29.5 31T622-440H324l-44 80h480v80H280q-45 0-68-39.5t-2-78.5l54-98-144-304H40v-80h130l38 80Zm134 280h280-280Z"/></svg>
                                     </a>
                                     <a
                                         href="{{ route('login') }}"
-                                        class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-black dark:hover:text-white/80 dark:focus-visible:ring-white"
+                                        class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-black dark:hover:text-black/20 dark:focus-visible:ring-white"
                                     >
                                         Log in
                                     </a>
@@ -64,7 +67,7 @@
                                     @if (Route::has('register'))
                                         <a
                                             href="{{ route('register') }}"
-                                            class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-black dark:hover:text-white/80 dark:focus-visible:ring-white"
+                                            class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-black dark:hover:text-black/20 dark:focus-visible:ring-white"
                                         >
                                             Register
                                         </a>
@@ -127,7 +130,7 @@
                             <input type="hidden" name="categories[]" value="{{ $category }}">
                         @endforeach
                         <div class="relative">
-                            <input type="text" name="query" placeholder="Search by..." class="w-full p-2 rounded border border-gray-300" value="{{ request('query') }}">
+                            <input type="text" name="query" placeholder="Search by..." class="w-full p-2 rounded border border-gray-300 text-black" value="{{ request('query') }} ">
                             <button type="submit" class="absolute right-0 top-0 h-full bg-white text-gray-500 p-2 rounded-r border-l border-gray-300">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M12.9 14.32a7.5 7.5 0 111.414-1.414l3.712 3.712a1 1 0 01-1.414 1.414l-3.712-3.712zM8.5 13a4.5 4.5 0 100-9 4.5 4.5 0 000 9z" clip-rule="evenodd" />
@@ -170,25 +173,39 @@
                         </button>
                     </form>
                     
-                    <main class="mt-6 py-5">
-                        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4" id="productlist">
-                            @foreach($products as $product)
-                                <div class="flex flex-col items-center rounded-lg bg-white p-4 shadow-md ring-1 ring-gray-200 hover:ring-gray-400 transition duration-300 light:bg-gray-800 light:ring-gray-700">
-                                    <!-- Gambar Produk -->
-                                    <a href="{{ route('product.show', $product->id) }}" class="w-full h-60 mb-4">
-                                        <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-cover rounded-lg">
-                                    </a>
-                                    
-                                    <!-- Detail Produk -->
-                                    <h2 class="text-lg font-semibold text-black dark:text-black text-center">{{ $product->name }}</h2>
-                                    <p class="mt-2 text-lg font-bold text-black dark:text-black text-center">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
-                                    <p class="text-gray-900 light:text-gray-100 font-bold">{{ $product->category }}</p>
+                    <main class="mt-6 py-5 bg-gray-50 text-black/50 light:bg-black dark:text-white/50">
+                        <div class="relative min-h-screen flex flex-col items-center justify-center selection:bg-[#FF2D20] selection:text-white">
+                            <div class="relative w-full max-w-2xl px-6 lg:max-w-7xl">
+                                <!-- Header -->
+                                <header class="grid grid-cols-2 items-center gap-2 py-10 lg:grid-cols-3">
+                                    <div class="flex lg:justify-center lg:col-start-2">
+                                        <!-- Animasi fade-in -->
+                                        <h1 data-aos="fade-up" class="text-4xl text-black font-bold">See Our Products</h1>
+                                    </div>
+                                </header>
+                                
+                                <!-- Section Product -->
+                                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10" id="productlist">
+                                    @foreach($products as $product)
+                                        <div data-aos="fade-up" class="flex flex-col items-start rounded-lg bg-white p-4 shadow-md ring-1 ring-gray-200 hover:ring-gray-400 transition duration-300 light:bg-gray-800 light:ring-gray-700">
+                                            <!-- Gambar Produk -->
+                                            <a href="{{ route('product.show', $product->id) }}" class="w-full h-60 mb-4">
+                                                <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-cover rounded-lg">
+                                            </a>
+                                            
+                                            <!-- Detail Produk -->
+                                            <h2 class="text-lg font-semibold text-gray-900 light:text-gray-100 text-left">{{ $product->name }}</h2>
+                                            <p class="inline-block bg-gray-800 text-white text-xs font-semibold py-1 px-3 rounded-full mt-2 w-fit">
+                                                {{ $product->category }}
+                                            </p>
+                                            <p class="mt-2 text-lg font-bold text-gray-900 light:text-gray-100 text-left">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
+                                        </div>
+                                    @endforeach
                                 </div>
-                            @endforeach
+                            </div>
                         </div>
                     </main>
 
-                    
                 </div>
             </div>
         </div>
@@ -211,5 +228,13 @@
             });
         }
     });
+
+    AOS.init({
+        duration: 1000, // Durasi animasi (dalam milidetik)
+        easing: 'ease-in-out', // Gaya animasi
+        once: true // Animasi hanya diputar sekali
+    });
+
+
 </script>
 

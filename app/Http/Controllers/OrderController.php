@@ -5,64 +5,64 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Cart;
 use App\Models\Order;
-use App\Models\Product; // Add this line
+use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
 use App\Models\OrderDetail;
 use Illuminate\Support\Facades\Gate;
 
-class OrderController extends Controller
+class   OrderController extends Controller
 {
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Request $request)
-{
-    $cartItems = collect();
+    // public function create(Request $request)
+    // {
+    //     $cartItems = collect();
 
-    // Pastikan `cart_items` selalu berupa array
-    $cartItemsInput = is_array($request->cart_items) 
-        ? $request->cart_items 
-        : (is_string($request->cart_items) ? explode(',', $request->cart_items) : []);
+    //     // Pastikan `cart_items` selalu berupa array
+    //     $cartItemsInput = is_array($request->cart_items) 
+    //         ? $request->cart_items 
+    //         : (is_string($request->cart_items) ? explode(',', $request->cart_items) : []);
 
-    // Jika parameter kosong atau invalid
-    if (empty($cartItemsInput)) {
-        return redirect()->route('buyer.cart.index')->with('error', 'No items selected for checkout.');
-    }
+    //     // Jika parameter kosong atau invalid
+    //     if (empty($cartItemsInput)) {
+    //         return redirect()->route('buyer.cart.index')->with('error', 'No items selected for checkout.');
+    //     }
 
-    // Ambil produk berdasarkan ID dari `cart_items`
-    $products = Product::whereIn('id', $cartItemsInput)->get();
+    //     // Ambil produk berdasarkan ID dari `cart_items`
+    //     $products = Product::whereIn('id', $cartItemsInput)->get();
 
-    // Buat $cartItems dari produk
-    $cartItems = $products->map(function ($product) {
-        return (object)[
-            'id' => null, // Jika tidak berasal dari keranjang
-            'product_id' => $product->id,
-            'amount' => 1, // Default jumlah untuk pembelian langsung
-            'product' => $product,
-        ];
-    });
+    //     // Buat $cartItems dari produk
+    //     $cartItems = $products->map(function ($product) {
+    //         return (object)[
+    //             'id' => null, // Jika tidak berasal dari keranjang
+    //             'product_id' => $product->id,
+    //             'amount' => 1, // Default jumlah untuk pembelian langsung
+    //             'product' => $product,
+    //         ];
+    //     });
 
-    // Ambil item dari keranjang jika ada
-    $cartItemsFromCart = Cart::whereIn('id', $cartItemsInput)
-        ->where('user_id', Auth::id())
-        ->with('product')
-        ->get();
+    //     // Ambil item dari keranjang jika ada
+    //     $cartItemsFromCart = Cart::whereIn('id', $cartItemsInput)
+    //         ->where('user_id', Auth::id())
+    //         ->with('product')
+    //         ->get();
 
-    // Gabungkan semua item
-    $cartItems = $cartItems->merge($cartItemsFromCart);
+    //     // Gabungkan semua item
+    //     $cartItems = $cartItems->merge($cartItemsFromCart);
 
-    if ($cartItems->isEmpty()) {
-        return redirect()->route('buyer.cart.index')->with('error', 'No items selected for checkout.');
-    }
+    //     if ($cartItems->isEmpty()) {
+    //         return redirect()->route('buyer.cart.index')->with('error', 'No items selected for checkout.');
+    //     }
 
-    return view('dashboard.buyer.order.create', compact('cartItems'));
-}
+    //     return view('dashboard.buyer.order.create', compact('cartItems'));
+    // }
 
 
 
 
     /**
-     * Store a newly created resource in storage.
+     * Menyiapkan order dari item di cart
      */
     public function store(Request $request)
     {
@@ -96,9 +96,14 @@ class OrderController extends Controller
             $item->delete();
         }
 
-        return redirect()->route('buyer.dashboard')->with('success', 'Order placed successfully.');
+        return redirect()->route('dashboard')->with('success', 'Order placed successfully.');
     }
 
+
+
+    /**
+     * Menyiapkan order dari pembelian langsung (buy now)
+     */
     public function storeOrderDetails(Request $request)
     {
         $request->validate([
@@ -147,15 +152,69 @@ class OrderController extends Controller
             ]);
         }
 
-        return redirect()->route('buyer.dashboard')->with('success', 'Order placed successfully.');
+        return redirect()->route('dashboard')->with('success', 'Order placed successfully.');
     }
 
-    public function index()
+
+
+    /**
+     * Menampilkan order dari buyer yang login
+     */
+    public function index(Request $request)
     {
-        $orders = Order::where('user_id', Auth::id())->with('orderDetails.product')->get();
+        $query = Order::where('user_id', Auth::id());
+
+        if ($request->has('status') && $request->status != '') {
+            $query->where('status', $request->status);
+        }
+
+        $orders = $query->with('orderDetails.product')->get();
         return view('dashboard.buyer.order.index', compact('orders'));
     }
 
+
+
+    /**
+     * Membuat order dari pembelian langsung (buy now)
+     */
+    public function buyNow($productId)
+    {
+        $product = Product::findOrFail($productId);
+        $cartItems = collect([
+            (object)[
+                'id' => null,
+                'product_id' => $product->id,
+                'amount' => 1,
+                'product' => $product,
+            ]
+        ]);
+        return view('dashboard.buyer.order.create', compact('cartItems'));
+    }
+
+
+
+    /**
+     * Membuat order dari cart
+     */
+    public function checkout(Request $request)
+    {
+        $cartItems = Cart::whereIn('id', $request->cart_items)
+                         ->where('user_id', Auth::id())
+                         ->with('product')
+                         ->get();
+        
+        if ($cartItems->isEmpty()) {
+            return redirect()->route('buyer.cart.index')->with('error', 'No items selected for checkout.');
+        }
+
+        return view('dashboard.buyer.order.create', compact('cartItems'));
+    }
+
+
+
+    /**
+     * Menampilkan detail order
+     */
     public function show(Order $order)
     {
         if (Gate::denies('view', $order)) {
@@ -165,6 +224,15 @@ class OrderController extends Controller
         return view('dashboard.buyer.order.show', compact('order'));
     }
 
+
+
+
+
+
+
+
+    
+    //seller orders function
     public function sellerOrderList()
     {
         $orders = Order::whereHas('orderDetails.product.store', function ($query) {
@@ -183,33 +251,7 @@ class OrderController extends Controller
         return view('dashboard.seller.orderList.allOrders', compact('orders'));
     }
 
-    public function buyNow($productId)
-    {
-        $product = Product::findOrFail($productId);
-        $cartItems = collect([
-            (object)[
-                'id' => null,
-                'product_id' => $product->id,
-                'amount' => 1,
-                'product' => $product,
-            ]
-        ]);
-        return view('dashboard.buyer.order.create', compact('cartItems'));
-    }
 
-    public function checkout(Request $request)
-    {
-        $cartItems = Cart::whereIn('id', $request->cart_items)
-                         ->where('user_id', Auth::id())
-                         ->with('product')
-                         ->get();
-        
-        if ($cartItems->isEmpty()) {
-            return redirect()->route('buyer.cart.index')->with('error', 'No items selected for checkout.');
-        }
-
-        return view('dashboard.buyer.order.create', compact('cartItems'));
-    }
 
     public function shipOrder(Order $order)
     {
@@ -226,7 +268,7 @@ class OrderController extends Controller
             $product->save();
         }
 
-        $order->status = 'Shipped'; // Ensure the status is a string
+        $order->status = 'Shipped';
         $order->save();
 
         return redirect()->back()->with('success', 'Order status updated to shipping.');

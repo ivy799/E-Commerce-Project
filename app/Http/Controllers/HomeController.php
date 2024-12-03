@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Product;
 use App\Models\Order;
+use App\Models\Store;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -19,7 +20,15 @@ class HomeController extends Controller
     {
         if (Auth::check()) {
             if (Auth::user()->role == 'admin') {
-                return view('dashboard.admin.AdminHome');
+                $userCount = User::count();
+                $productCount = Product::count();
+                $storeCount = Store::count();
+                $adminName = Auth::user()->name;
+                $ordersPerDay = Order::select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as count'))
+                    ->groupBy('date')
+                    ->orderBy('date', 'asc')
+                    ->get();
+                return view('dashboard.admin.AdminHome', compact('userCount', 'productCount', 'ordersPerDay', 'storeCount', 'adminName'));
             } elseif (Auth::user()->role == 'seller') {
                 $store = Auth::user()->store;
                 $productCount = $store->products()->count();
@@ -113,29 +122,41 @@ class HomeController extends Controller
         $categories = Product::select('category')->distinct()->pluck('category');
         $recommendedProducts = Product::inRandomOrder()->take(3)->get();
         
-        if (Auth::check() && Auth::user()->role == 'admin') {
-            return view('dashboard.admin.Home', compact('products', 'categories', 'recommendedProducts'));
+        if (Auth::check()) {
+            if (Auth::user()->role == 'admin') {
+                return view('dashboard.admin.Home', compact('products', 'categories', 'recommendedProducts'));
+            }
+            return view('dashboard.buyer.home', compact('products', 'categories', 'recommendedProducts'));
+        } else {
+            return view('welcome', compact('products', 'categories', 'recommendedProducts'));
         }
-        return view('dashboard.buyer.home', compact('products', 'categories', 'recommendedProducts'));
     }
 
     public function filter(Request $request)
     {
         $categories = $request->input('categories', []);
         $query = $request->input('query');
-        $products = Product::whereIn('category', $categories)
-                            ->when($query, function ($q) use ($query) {
-                                $q->where('name', 'LIKE', "%{$query}%")
-                                  ->orWhere('description', 'LIKE', "%{$query}%");
-                            })
-                            ->get();
+
+        $products = Product::when($categories, function ($q) use ($categories) {
+            $q->whereIn('category', $categories);
+        })
+        ->when($query, function ($q) use ($query) {
+            $q->where('name', 'LIKE', "%{$query}%")
+              ->orWhere('description', 'LIKE', "%{$query}%");
+        })
+        ->get();
+
         $categories = Product::select('category')->distinct()->pluck('category');
         $recommendedProducts = Product::inRandomOrder()->take(3)->get();
         
-        if (Auth::check() && Auth::user()->role == 'admin') {
-            return view('dashboard.admin.Home', compact('products', 'categories', 'recommendedProducts'));
+        if (Auth::check()) {
+            if (Auth::user()->role == 'admin') {
+                return view('dashboard.admin.Home', compact('products', 'categories', 'recommendedProducts'));
+            }
+            return view('dashboard.buyer.home', compact('products', 'categories', 'recommendedProducts'));
+        } else {
+            return view('welcome', compact('products', 'categories', 'recommendedProducts'));
         }
-        return view('dashboard.buyer.home', compact('products', 'categories', 'recommendedProducts'));
     }
 
     public function welcomeSearch(Request $request)

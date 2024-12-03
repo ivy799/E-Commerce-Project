@@ -18,6 +18,8 @@
                 scroll-behavior: smooth;
             }
         </style>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-white">

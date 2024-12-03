@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 class CartController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Menampilkan daftar item di cart milik user yang sedang login
      */
     public function index()
     {
@@ -17,16 +17,14 @@ class CartController extends Controller
         return view('dashboard.buyer.cart.index', compact('cartItems'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+
     public function create()
     {
         //
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Menambahkan item ke cart, jika sudah ada maka jumlahnya yang bertambah
      */
     public function store(Request $request)
     {
@@ -52,24 +50,20 @@ class CartController extends Controller
         return redirect()->route('buyer.cart.index')->with('success', 'Product added to cart.');
     }
 
-    /**
-     * Display the specified resource.
-     */
+
     public function show(string $id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+
     public function edit(string $id)
     {
         //
     }
 
     /**
-     * Update the specified resource in storage.
+     * Mengupdate jumlah item di cart, sesuai jumlah inputan
      */
     public function update(Request $request, string $id)
     {
@@ -89,7 +83,7 @@ class CartController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Menghapus item dari cart
      */
     public function destroy(string $id)
     {

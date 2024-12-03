@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 class FavoriteController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Menampilkan daftar produk favorit milik user yang sedang login
      */
     public function index()
     {
@@ -17,16 +17,14 @@ class FavoriteController extends Controller
         return view('dashboard.buyer.favorite.index', compact('favorites'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+
     public function create()
     {
         //
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Menambahkan produk ke favorit, jika sudah ada maka tidak ditambahkan
      */
     public function store(Request $request)
     {
@@ -34,6 +32,16 @@ class FavoriteController extends Controller
             'product_id' => 'required|exists:products,id',
         ]);
 
+
+        $exists = Favorite::where('user_id', Auth::id())
+            ->where('product_id', $request->product_id)
+            ->exists();
+
+        if ($exists) {
+            return redirect()->route('buyer.favorites.index')->with('info', 'Product is already in your favorites.');
+        }
+
+        // Tambahkan produk ke favorit jika belum ada
         Favorite::create([
             'user_id' => Auth::id(),
             'product_id' => $request->product_id,
@@ -42,32 +50,26 @@ class FavoriteController extends Controller
         return redirect()->route('buyer.favorites.index')->with('success', 'Product added to favorites.');
     }
 
-    /**
-     * Display the specified resource.
-     */
+
     public function show(string $id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+
     public function edit(string $id)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+
     public function update(Request $request, string $id)
     {
         //
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Menghapus produk dari favorit
      */
     public function destroy(string $id)
     {

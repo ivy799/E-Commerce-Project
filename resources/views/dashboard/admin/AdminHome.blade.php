@@ -1,42 +1,51 @@
 <x-app-layout>
-    {{-- <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 light:text-gray-200 leading-tight">
-            {{ __('Dashboard Admin') }}
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-light-800 dark:text-light-200 leading-tight">
+            {{ __('WELCOME HOME ')}} 
+            <span class="bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
+                {{ strtoupper($adminName) }}
+            </span>
         </h2>
-    </x-slot> --}}
+    </x-slot>
 
-    
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="grid grid-cols-3 gap-4 p-6 text-center">
-                    <div class="bg-white p-6 rounded-lg shadow-md border-solid border-2 border-black">
-                        <div class="flex items-center justify-center">
-                            <div class="ml-2 text-left">
-                                <h3 class="text-xl font-semibold">Total User</h3>
-                                <p class="text-2xl font-bold">{{ $userCount-1 }}</p>
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+                <div class="grid grid-cols-3 gap-6 text-center">
+                    <!-- Card 1 -->
+                    <div class="bg-gradient-to-r from-lime-500 to-green-400 p-6 rounded-lg shadow-md text-white transform hover:scale-105 transition-transform duration-300">
+                        <div class="flex items-center justify-center space-x-4">
+                            <div>
+                                <h3 class="text-lg font-semibold">Total User</h3>
+                                <p class="text-3xl font-bold">{{ $userCount - 1 }}</p>
                             </div>
                         </div>
                     </div>
-                    <div class="bg-white p-6 rounded-lg shadow-md border-solid border-2 border-black">
-                        <div class="flex items-center justify-center">
-                            <div class="ml-2 text-left">
-                                <h3 class="text-xl font-semibold">Active Buyer</h3>
-                                <p class="text-2xl font-bold">{{ $buyerCount }}</p>
+
+                    <!-- Card 2 -->
+                    <div class="bg-gradient-to-r from-blue-400 to-blue-600 p-6 rounded-lg shadow-md text-white transform hover:scale-105 transition-transform duration-300">
+                        <div class="flex items-center justify-center space-x-4">
+                            <div>
+                                <h3 class="text-lg font-semibold">Total Product</h3>
+                                <p class="text-3xl font-bold">{{ $productCount }}</p>
                             </div>
                         </div>
                     </div>
-                    <div class="bg-white p-6 rounded-lg shadow-md border-solid border-2 border-black">
-                        <div class="flex items-center justify-center">
-                            <div class="ml-2 text-left">
-                                <h3 class="text-xl font-semibold">Active Seller</h3>
-                                <p class="text-2xl font-bold">{{ $sellerCount }}</p>
+
+                    <!-- Card 3 -->
+                    <div class="bg-gradient-to-r from-purple-400 to-purple-600 p-6 rounded-lg shadow-md text-white transform hover:scale-105 transition-transform duration-300">
+                        <div class="flex items-center justify-center space-x-4">
+                            <div>
+                                <h3 class="text-lg font-semibold">Total Store</h3>
+                                <p class="text-3xl font-bold">{{ $storeCount }}</p>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="mb-4">
-                    <h3 class="text-2xl font-semibold">Web Traffic</h3>
+
+                <!-- Web Traffic Chart -->
+                <div class="mt-8">
+                    <h3 class="text-2xl font-semibold mb-4 text-gray-800">Web Traffic</h3>
                     <canvas id="ordersChart"></canvas>
                 </div>
             </div>
@@ -63,10 +72,13 @@
                     data: data,
                     borderColor: 'rgba(75, 192, 192, 1)',
                     backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderWidth: 1
+                    borderWidth: 2,
+                    pointRadius: 4,
+                    pointBackgroundColor: 'rgba(75, 192, 192, 1)',
                 }]
             },
             options: {
+                responsive: true,
                 scales: {
                     x: {
                         type: 'time',

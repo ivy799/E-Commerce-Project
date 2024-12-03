@@ -1,11 +1,11 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{
     HomeController,
     ProductBuyerController,
     ProfileController,
     UserController,
-    AdminController,
     StoreController,
     ProductController,
     FavoriteController,
@@ -13,16 +13,7 @@ use App\Http\Controllers\{
     OrderController,
     CommentRatingController
 };
-use Illuminate\Support\Facades\Route;
 
-
-// Public Routes
-Route::get('/', [ProductController::class, 'welcome'])->name('welcome');
-Route::get('/product/{product}', [ProductController::class, 'show'])->name('product.show');
-Route::get('/search', [HomeController::class, 'search'])->name('search');
-Route::get('/filter', [HomeController::class, 'filter'])->name('filter');
-Route::get('/welcome/search', [HomeController::class, 'welcomeSearch'])->name('welcome.search');
-Route::get('/welcome/filter', [HomeController::class, 'welcomeFilter'])->name('welcome.filter');
 
 
 
@@ -43,9 +34,30 @@ Route::middleware('auth')->group(function () {
 
 
 
+
+
+// Public Routes
+Route::get('/', [ProductController::class, 'welcome'])->name('welcome');
+Route::get('/product/{product}', [ProductController::class, 'show'])->name('product.show');
+Route::get('/search', [HomeController::class, 'search'])->name('search');
+Route::get('/filter', [HomeController::class, 'filter'])->name('filter');
+Route::get('/welcome/search', [HomeController::class, 'welcomeSearch'])->name('welcome.search');
+Route::get('/welcome/filter', [HomeController::class, 'welcomeFilter'])->name('welcome.filter');
+
+
+
+
+
+
+
 // Admin Routes
 Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+    // Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+    // Route::get('/admin/home', [AdminController::class, 'adminHome'])->name('admin.home');
+    //menggunakan route manual karna nama tidak sesuai dengan nama restfull standar(index,destroy, dll) saya memakai nama custom 
+    Route::get('/admin/products', [ProductController::class, 'adminIndex'])->name('admin.products.index');
+    Route::delete('/admin/products/{product}', [ProductController::class, 'adminDestroy'])->name('admin.products.destroy');
+    
     Route::resource('/admin/users', UserController::class)->names([
         'index'   => 'admin.users.index',
         'create'  => 'admin.users.create',
@@ -55,9 +67,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         'update'  => 'admin.users.update',
         'destroy' => 'admin.users.destroy',
     ]);
-    Route::get('/admin/home', [AdminController::class, 'adminHome'])->name('admin.home');
-    Route::get('/admin/products', [ProductController::class, 'adminIndex'])->name('admin.products.index');
-    Route::delete('/admin/products/{product}', [ProductController::class, 'adminDestroy'])->name('admin.products.destroy');
 });
 
 
@@ -66,7 +75,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
 // Seller Routes
 Route::middleware(['auth', 'role:seller'])->group(function () {
-    Route::get('/seller/dashboard', [HomeController::class, 'index'])->name('seller.dashboard');
+    // Route::get('/seller/dashboard', [HomeController::class, 'index'])->name('seller.dashboard');
 
     Route::resource('/seller/stores', StoreController::class)->names([
         'index'   => 'seller.stores.index',
@@ -89,9 +98,9 @@ Route::middleware(['auth', 'role:seller'])->group(function () {
     ]);
 
     Route::get('/seller/orders', [OrderController::class, 'sellerOrderList'])->name('seller.orders.index');
-    Route::get('/seller/orders/{order}', [OrderController::class, 'show'])->name('seller.orders.show');
-    Route::get('/seller/orders/all', [OrderController::class, 'allOrdersFromBuyers'])->name('seller.orders.all');
     Route::patch('/seller/orders/{order}/ship', [OrderController::class, 'shipOrder'])->name('seller.orders.ship');
+    // Route::get('/seller/orders/{order}', [OrderController::class, 'show'])->name('seller.orders.show');
+    // Route::get('/seller/orders/all', [OrderController::class, 'allOrdersFromBuyers'])->name('seller.orders.all');
 });
 
 
@@ -103,29 +112,38 @@ Route::middleware(['auth', 'role:seller'])->group(function () {
 
 // Buyer Routes
 Route::middleware(['auth', 'role:buyer'])->group(function () {
-    Route::get('/buyer/dashboard', [HomeController::class, 'index'])->name('buyer.dashboard');
-    Route::get('/buyer/products/{product}', [ProductBuyerController::class, 'show'])->name('buyer.products.show');
 
-    Route::post('/buyer/cart', [CartController::class, 'store'])->name('buyer.cart.store');
-    Route::get('/buyer/cart', [CartController::class, 'index'])->name('buyer.cart.index');
-    Route::patch('/buyer/cart/{cart}', [CartController::class, 'update'])->name('buyer.cart.update');
-    Route::delete('/buyer/cart/{cart}', [CartController::class, 'destroy'])->name('buyer.cart.destroy');
-
+    Route::get('/buyer/products/{product}', [ProductBuyerController::class, 'show'])->name('buyer.products.show'); //product details
+    
+    //cart
+    Route::resource('/buyer/cart', CartController::class)->names([
+        'index'   => 'buyer.cart.index',
+        'store'   => 'buyer.cart.store',
+        'update'  => 'buyer.cart.update',
+        'destroy' => 'buyer.cart.destroy',
+    ]);
+    
+    //favorite
     Route::resource('/buyer/favorites', FavoriteController::class)->names([
         'index'   => 'buyer.favorites.index',
         'store'   => 'buyer.favorites.store',
         'destroy' => 'buyer.favorites.destroy',
     ]);
+    
+    //order
+    Route::resource('/buyer/orders', OrderController::class)->names([
+        'index'   => 'buyer.orders.index',
+        // 'create'  => 'buyer.orders.create',
+        'store'   => 'buyer.orders.store',
+        'show'    => 'buyer.orders.show',
+    ]);
 
-    Route::resource('/buyer/orders', OrderController::class)->only(['create', 'store']);
-    Route::get('/buyer/orders/create', [OrderController::class, 'create'])->name('buyer.orders.create');
-    Route::post('/buyer/orders', [OrderController::class, 'store'])->name('buyer.orders.store');
-    Route::post('/buyer/orders/details', [OrderController::class, 'storeOrderDetails'])->name('buyer.orders.details.store');
-    Route::post('/buyer/orders/checkout', [OrderController::class, 'checkout'])->name('buyer.orders.checkout');
-    Route::get('/buyer/orders', [OrderController::class, 'index'])->name('buyer.orders.index');
-    Route::get('/buyer/orders/{order}', [OrderController::class, 'show'])->name('buyer.orders.show');
-    Route::get('/buyer/orders/buy-now/{product}', [OrderController::class, 'buyNow'])->name('buyer.orders.buyNow');
-    Route::post('/products/{product}/comments', [CommentRatingController::class, 'store'])->name('comments.store');
+
+    Route::post('/products/{product}/comments', [CommentRatingController::class, 'store'])->name('comments.store'); //melaukan comment dan rating pada product
+    Route::post('/buyer/orders/details', [OrderController::class, 'storeOrderDetails'])->name('buyer.orders.details.store'); //pembuatan orderdetails dari order buy now 
+    Route::post('/buyer/orders/checkout', [OrderController::class, 'checkout'])->name('buyer.orders.checkout'); //membeli melalui cart (checkout)
+    Route::get('/buyer/orders/buy-now/{product}', [OrderController::class, 'buyNow'])->name('buyer.orders.buyNow'); //membeli langsung tanpa melalui cart
+    // Route::get('/buyer/dashboard', [HomeController::class, 'index'])->name('buyer.dashboard');
 });
 
 require __DIR__ . '/auth.php';

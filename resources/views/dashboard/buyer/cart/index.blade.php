@@ -39,7 +39,7 @@
                                             <form action="{{ route('buyer.cart.update', $item->id) }}" method="POST">
                                                 @csrf
                                                 @method('PATCH')
-                                                <input type="number" name="amount" value="{{ $item->amount }}" min="1" class="text-sm text-gray-900 rounded-full">
+                                                <input type="number" name="amount" value="{{ $item->amount }}" min="1" class="text-sm text-gray-900 rounded-full" oninput="this.value = Math.abs(this.value)">
                                                 <button type="submit" class="ml-2 bg-white hover:bg-black hover:text-white text-black font-semibold py-1 px-2 rounded-lg shadow">Update</button>
                                             </form>
                                         </td>
@@ -47,7 +47,7 @@
                                             <div class="text-sm text-gray-900">${{ number_format($item->product->price, 2) }}</div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <form action="{{ route('buyer.cart.destroy', $item->id) }}" method="POST">
+                                            <form action="{{ route('buyer.cart.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to remove this item from your cart?');">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="bg-black hover:bg-white hover:text-black text-white font-semibold py-2 px-4 rounded-lg shadow">

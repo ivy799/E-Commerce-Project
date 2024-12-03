@@ -31,7 +31,7 @@
                                                 Add to Cart
                                             </button>
                                         </form>
-                                        <form action="{{ route('buyer.favorites.destroy', $favorite->id) }}" method="POST">
+                                        <form action="{{ route('buyer.favorites.destroy', $favorite->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to remove this item from your favorite?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="bg-black hover:bg-white hover:text-black text-white font-semibold py-2 px-4 rounded-lg shadow">Remove</button>

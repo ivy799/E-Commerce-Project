@@ -14,16 +14,14 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100 dark:bg-gray-900">
-            <div>
-                <a href="/">
-                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-                </a>
-            </div>
-
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
-                {{ $slot }}
+    <body class="font-sans text-gray-900 antialiased bg-gray-100">
+        <div class="min-h-screen flex items-center">
+            <!-- Left Section (Form) -->
+            <div class="w-full flex flex-col justify-center items-center bg-gray-100 light:bg-gray-900 p-8">
+                <h1 class="text-4xl font-bold mb-4 text-gray-800 light:text-gray-100">HERMES</h1>
+                <div class="w-full sm:max-w-md px-6 py-4 bg-white light:bg-gray-800 shadow-md rounded-lg">
+                    {{ $slot }}
+                </div>
             </div>
         </div>
     </body>

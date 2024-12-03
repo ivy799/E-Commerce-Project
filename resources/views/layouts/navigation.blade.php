@@ -15,7 +15,7 @@
                 @auth
                     @if(Auth::user()->role === 'admin')
                         <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                            <x-nav-link :href="route('admin.home')" :active="request()->routeIs('admin.home')">
+                            <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M520-600v-240h320v240H520ZM120-440v-400h320v400H120Zm400 320v-400h320v400H520Zm-400 0v-240h320v240H120Zm80-400h160v-240H200v240Zm400 320h160v-240H600v240Zm0-480h160v-80H600v80ZM200-200h160v-80H200v80Zm160-320Zm240-160Zm0 240ZM360-280Z"/></svg>                            
                             </x-nav-link>
                             <x-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.index')">
@@ -103,6 +103,34 @@
                 <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                     {{ __('Dashboard') }}
                 </x-responsive-nav-link>
+                @if(Auth::user()->role === 'admin')
+                    <x-responsive-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.index')">
+                        {{ __('Manage Users') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('admin.products.index')" :active="request()->routeIs('admin.products.index')">
+                        {{ __('Manage Products') }}
+                    </x-responsive-nav-link>
+                @elseif(Auth::user()->role === 'seller')
+                    <x-responsive-nav-link :href="route('seller.stores.index')" :active="request()->routeIs('seller.stores.index')">
+                        {{ __('My Store') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('seller.products.index')" :active="request()->routeIs('seller.products.index')">
+                        {{ __('My Products') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('seller.orders.index')" :active="request()->routeIs('seller.orders.index')">
+                        {{ __('Orders') }}
+                    </x-responsive-nav-link>
+                @elseif(Auth::user()->role === 'buyer')
+                    <x-responsive-nav-link :href="route('buyer.cart.index')" :active="request()->routeIs('buyer.cart.index')">
+                        {{ __('My Cart') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('buyer.favorites.index')" :active="request()->routeIs('buyer.favorites.index')">
+                        {{ __('Favorites') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('buyer.orders.index')" :active="request()->routeIs('buyer.orders.index')">
+                        {{ __('My Orders') }}
+                    </x-responsive-nav-link>
+                @endif
             </div>
             <div class="pt-4 pb-1 border-t border-gray-200">
                 <div class="px-4">
